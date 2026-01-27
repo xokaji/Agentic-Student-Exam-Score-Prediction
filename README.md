@@ -1,7 +1,7 @@
 # Student Exam Score Prediction
 
 ## Problem
-Predict student exam scores based on study habits and attendance.
+Predict student exam scores based on study habits, attendance and give recommenedations through Agentic AI.
 
 ## Approach
 - Linear Regression
