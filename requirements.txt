@@ -5,4 +5,7 @@ scikit-learn
 jupyter
 flask
 flask-cors
+fastapi
+uvicorn 
+joblib
 
