@@ -1,0 +1,24 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import pandas as pd
+from src.model import train_model
+from src.data_loader import load_data
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
+# Load and train once
+data = load_data("data/raw/student_scores.csv")
+X = data[["study_hours", "attendance", "sleep_hours"]]
+y = data["exam_score"]
+model = train_model(X, y)
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.json
+    input_df = pd.DataFrame([data])
+    prediction = model.predict(input_df)
+    return jsonify({"predicted_score": float(prediction[0])})
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000, debug=True)
