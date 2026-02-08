@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pandas as pd
 from src.model import train_model
@@ -33,6 +33,11 @@ def predict():
         "agent_decision": decision,
         "recommendation": recommendation
     })
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
 
 
 if __name__ == "__main__":
