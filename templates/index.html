@@ -600,19 +600,33 @@
       function predict(event) {
         event.preventDefault();
 
-        const study = document.getElementById("study").value;
-        const attendance = document.getElementById("attendance").value;
-        const sleep = document.getElementById("sleep").value;
+        const study = Number(document.getElementById("study").value);
+        const attendance = Number(document.getElementById("attendance").value);
+        const sleep = Number(document.getElementById("sleep").value);
 
         // Client-side validation
-        if (!study || !attendance || !sleep) {
+        if (Number.isNaN(study) || Number.isNaN(attendance) || Number.isNaN(sleep)) {
           setState({ state: "error", message: "Please fill in all fields." });
+          return;
+        }
+        if (study < 0 || sleep < 0) {
+          setState({
+            state: "error",
+            message: "Study hours and sleep hours must be >= 0.",
+          });
           return;
         }
         if (attendance < 0 || attendance > 100) {
           setState({
             state: "error",
             message: "Attendance must be between 0 and 100.",
+          });
+          return;
+        }
+        if (study + sleep > 24) {
+          setState({
+            state: "error",
+            message: "Study hours + sleep hours must be <= 24.",
           });
           return;
         }
@@ -623,9 +637,9 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            study_hours: Number(study),
-            attendance: Number(attendance) / 100,
-            sleep_hours: Number(sleep),
+            study_hours: study,
+            attendance: attendance,
+            sleep_hours: sleep,
           }),
         })
           .then((res) => {
@@ -682,7 +696,7 @@
             setState({
               state: "error",
               message:
-                "Could not connect to the server. Make sure the Flask app is running on port 5000.",
+                "Could not connect to the server. Make sure the Flask app is running on port 8000.",
             });
           });
       }
